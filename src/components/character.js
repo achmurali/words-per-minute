@@ -1,5 +1,11 @@
+import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import CorrectTextTypography from './correcttexttypography';
+import IncorrectTextTypography from './incorrecttexttypography';
+import NextCharTypography from './nexttexttypography';
+
 const Character = React.memo(({ chr, id, chrsTyped }) => {
-    const classes = useStyles()
+    //const classes = useStyles()
     let CharTypography;
 
     if (id == chrsTyped.length) {
@@ -14,18 +20,13 @@ const Character = React.memo(({ chr, id, chrsTyped }) => {
         CharTypography = IncorrectTextTypography
     }
 
-    return (<CharTypography className={classes.lyric} color={"textSecondary"}>
+    return (<CharTypography color={"textSecondary"} display='inline'>
         {chr}
     </CharTypography>)
 }, (props, nextProps) => {
-    /** Significant pref boost avoiding render 
-     * We only needs re-render a sliding window of 3 characters 
-     * from where user needs to type
-    */
     if (props.id == nextProps.chrsTyped.length - 1 ||
         (props.id == nextProps.chrsTyped.length) ||
         (props.id == nextProps.chrsTyped.length + 1)) {
-        // Return false to re-render
         return false;
     } else {
         // Return true to avoid re-render

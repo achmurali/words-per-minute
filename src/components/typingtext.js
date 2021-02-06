@@ -1,6 +1,5 @@
 import React from 'react';
-import useKeyPress from './hooks/useKeyPress';
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import useKeyPress from '../hooks/useKeyPress';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Character from './character';
@@ -18,14 +17,12 @@ function TypingText({ text }) {
     const timer = React.useRef();
 
     React.useEffect(() => {
-        const chars = textByLine.map(line => line.trim().split("").map(c => c)).flat()
+        const chars = textByLine.map(line => line.trim().split("")).flat()
         setCharsToType(chars);
     }, []);
 
 
     useKeyPress(key => {
-        // Optimize by keeping track of chr index and current chr
-        // But for clarity storing all typed characters.
         if (key != "Backspace") {
             setChrsTyped((prevChrsTyped) => ([...prevChrsTyped, key]))
         } else {
@@ -36,7 +33,6 @@ function TypingText({ text }) {
 
     // Start timer when user types first character.
     if (timer.current === undefined && chrsTyped.length > 0) {
-        // Start timer to keep track of WPM
         var start = Date.now();
         timer.current = setInterval(() => {
             var delta = Date.now() - start; // milliseconds elapsed since start
@@ -45,7 +41,6 @@ function TypingText({ text }) {
 
     }
 
-    // Once we reach the end then stop timer.
     if (timer.current && charsToType.length <= chrsTyped.length) {
         clearInterval(timer.current);
         timer.current = null;
@@ -63,7 +58,7 @@ function TypingText({ text }) {
     const wpm = (chrsTyped.length / 5) / (seconds / 60);
 
     return (
-        <React.Fragment>
+        <>
             <Box>
                 <Typography>{`Accuracy: ${isNaN(accuracy) ? '-' : accuracyText}`}</Typography>
                 <Typography>{`WPM: ${isNaN(wpm) ? '-' : (wpm).toFixed(0)}`}</Typography>
@@ -80,7 +75,7 @@ function TypingText({ text }) {
                     }
                 </Box>
             )}
-        </React.Fragment>
+        </>
     )
 }
 
